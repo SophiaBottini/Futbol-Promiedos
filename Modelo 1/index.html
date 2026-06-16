@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Futbol en vivo — Mundial 2026, resultados, posiciones, fixture y Prode">
+<meta name="theme-color" content="#0a0e1a">
+<title>FutbolHoy · Mundial 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="header-inner">
+    <a class="header-logo" href="#">
+      <div class="logo-ball">⚽</div>
+      <div class="logo-text">
+        <span class="logo-name">Futbol<strong>Hoy</strong></span>
+        <span class="logo-sub">EE.UU. · México · Canadá 2026</span>
+      </div>
+    </a>
+
+    <nav class="header-nav">
+      <button class="tab tab--active" data-tab="resultados">Resultados</button>
+      <button class="tab" data-tab="posiciones">Posiciones</button>
+      <button class="tab" data-tab="fixture">Fixture</button>
+      <button class="tab" data-tab="predicciones">🔮 Predicciones</button>
+      <button class="tab tab--prode" data-tab="prode">🏆 PRODE</button>
+    </nav>
+
+    <div class="header-actions">
+      <span class="update-time" id="lastUpdate"></span>
+      <button class="btn-refresh" id="btnRefresh">↻ Actualizar</button>
+      <span class="api-badge api-badge--loading" id="apiStatus">Cargando…</span>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════
+     AD — LEADERBOARD TOP
+══════════════════════════════════════════ -->
+<div class="ad-leaderboard">
+  <div class="ad-inner">
+    <span class="ad-label">Publicidad</span>
+    <!-- Google AdSense / tu red publicitaria aquí -->
+    <div class="ad-placeholder">📢 728×90 · Leaderboard</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TABS MOBILE (scroll horizontal)
+══════════════════════════════════════════ -->
+<div class="tabs-mobile" id="tabsMobile">
+  <button class="tab tab--active" data-tab="resultados">Resultados</button>
+  <button class="tab" data-tab="posiciones">Posiciones</button>
+  <button class="tab" data-tab="fixture">Fixture</button>
+  <button class="tab" data-tab="predicciones">🔮 Predicciones</button>
+  <button class="tab tab--prode" data-tab="prode">🏆 PRODE</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MAIN LAYOUT
+══════════════════════════════════════════ -->
+<div class="page-wrapper">
+
+  <!-- ── SIDEBAR LEFT (desktop) ── -->
+  <aside class="sidebar sidebar--left">
+    <div class="ad-box ad-box--300x600">
+      <span class="ad-label">Publicidad</span>
+      <div class="ad-placeholder">300×600</div>
+    </div>
+  </aside>
+
+  <!-- ── CONTENT ── -->
+  <main class="main-content">
+
+    <!-- ════ TAB: RESULTADOS ════ -->
+    <section id="tab-resultados" class="tab-section tab-section--active">
+
+      <!-- LIVE -->
+      <div id="live-wrap" class="live-section" style="display:none">
+        <h2 class="section-title section-title--live">🔴 En vivo ahora</h2>
+        <div class="matches-grid" id="live-grid"></div>
+      </div>
+
+      <!-- HOY -->
+      <h2 class="section-title" id="today-heading">
+        Hoy · <span id="today-date"></span>
+      </h2>
+      <div class="matches-grid" id="today-grid">
+        <div class="skeleton"></div><div class="skeleton"></div>
+      </div>
+
+      <!-- ÚLTIMOS RESULTADOS -->
+      <h2 class="section-title">Últimos resultados</h2>
+      <div class="matches-grid" id="recent-grid">
+        <div class="skeleton"></div><div class="skeleton"></div>
+      </div>
+
+      <!-- AD mid-content -->
+      <div class="ad-rectangle">
+        <span class="ad-label">Publicidad</span>
+        <div class="ad-placeholder">📢 728×90 · Inline</div>
+      </div>
+
+      <!-- PRÓXIMOS -->
+      <h2 class="section-title">Próximos partidos</h2>
+      <div class="matches-grid" id="upcoming-grid">
+        <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+      </div>
+
+    </section>
+
+    <!-- ════ TAB: POSICIONES ════ -->
+    <section id="tab-posiciones" class="tab-section">
+      <h2 class="section-title">Tabla de posiciones — Fase de grupos</h2>
+      <div class="standings-grid" id="standings-grid">
+        <div class="skeleton skeleton--tall"></div>
+        <div class="skeleton skeleton--tall"></div>
+        <div class="skeleton skeleton--tall"></div>
+        <div class="skeleton skeleton--tall"></div>
+      </div>
+      <div class="legend">
+        <div class="legend-item"><span class="legend-dot legend-dot--green"></span> Clasificado directo (Top 2)</div>
+        <div class="legend-item"><span class="legend-dot legend-dot--gold"></span> Posible mejor 3ro</div>
+        <div class="legend-item"><span class="legend-dot legend-dot--red"></span> Eliminado</div>
+      </div>
+    </section>
+
+    <!-- ════ TAB: FIXTURE ════ -->
+    <section id="tab-fixture" class="tab-section">
+      <h2 class="section-title">Calendario completo · Fase de grupos</h2>
+      <div id="fixture-container">
+        <div class="skeleton"></div>
+        <div class="skeleton" style="margin-top:6px"></div>
+        <div class="skeleton" style="margin-top:6px"></div>
+      </div>
+    </section>
+
+    <!-- ════ TAB: PREDICCIONES ════ -->
+    <section id="tab-predicciones" class="tab-section">
+      <div class="disclaimer">
+        ⚠️ <strong>Solo entretenimiento.</strong> Probabilidades estimadas (~20 partidos por equipo).
+        <strong>NO son asesoramiento de apuestas.</strong> Fuentes: SofaScore · FotMob · FIFA.com
+      </div>
+      <div class="pred-controls">
+        <div class="ctrl-group">
+          <label class="ctrl-label">Grupo</label>
+          <select id="filtroG">
+            <option value="">Todos</option>
+            <option>A</option><option>B</option><option>C</option><option>D</option>
+            <option>E</option><option>F</option><option>G</option><option>H</option>
+            <option>I</option><option>J</option><option>K</option><option>L</option>
+          </select>
+        </div>
+        <div class="ctrl-group">
+          <label class="ctrl-label">Confederación</label>
+          <select id="filtroC">
+            <option value="">Todas</option>
+            <option>CONMEBOL</option><option>UEFA</option>
+            <option>CONCACAF</option><option>CAF</option><option>AFC</option>
+          </select>
+        </div>
+        <div class="ctrl-group">
+          <label class="ctrl-label">Buscar</label>
+          <input type="text" id="buscar" placeholder="Ej: Argentina…">
+        </div>
+        <span class="pred-count" id="contador">48 equipos</span>
+      </div>
+      <div class="pred-grid" id="predGrid"></div>
+    </section>
+
+    <!-- ════ TAB: PRODE ════ -->
+    <section id="tab-prode" class="tab-section">
+      <div class="prode-hero">
+        <div class="prode-hero__icon">🏆</div>
+        <h2 class="prode-hero__title">Tu PRODE del Mundial 2026</h2>
+        <p class="prode-hero__sub">Completá los resultados de la fase de grupos y compartí tu pronóstico</p>
+      </div>
+
+      <div class="prode-info">
+        <div class="prode-info__item">
+          <span class="prode-info__num" id="prode-total">0</span>
+          <span class="prode-info__lbl">Partidos</span>
+        </div>
+        <div class="prode-info__item">
+          <span class="prode-info__num prode-info__num--green" id="prode-completados">0</span>
+          <span class="prode-info__lbl">Completados</span>
+        </div>
+        <div class="prode-info__item">
+          <span class="prode-info__num prode-info__num--gold" id="prode-aciertos">0</span>
+          <span class="prode-info__lbl">Aciertos</span>
+        </div>
+        <div class="prode-info__item">
+          <span class="prode-info__num prode-info__num--blue" id="prode-pts">0</span>
+          <span class="prode-info__lbl">Puntos</span>
+        </div>
+      </div>
+
+      <div class="prode-actions">
+        <button class="btn-prode btn-prode--primary" id="btnSaveProde">💾 Guardar pronósticos</button>
+        <button class="btn-prode btn-prode--secondary" id="btnShareProde">📤 Compartir</button>
+        <button class="btn-prode btn-prode--danger" id="btnResetProde">🗑 Borrar todo</button>
+      </div>
+
+      <div class="prode-scoring">
+        <span>Puntos: <strong class="text-green">Resultado exacto = 3pts</strong> · <strong class="text-gold">Ganador correcto = 1pt</strong></span>
+      </div>
+
+      <div id="prode-grid" class="prode-matches">
+        <div class="skeleton skeleton--tall"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── SIDEBAR RIGHT (desktop) ── -->
+  <aside class="sidebar sidebar--right">
+    <div class="ad-box ad-box--300x250">
+      <span class="ad-label">Publicidad</span>
+      <div class="ad-placeholder">300×250</div>
+    </div>
+    <div class="widget widget--standings">
+      <h3 class="widget-title">⚽ Top Grupo A</h3>
+      <div id="widget-standings"></div>
+    </div>
+    <div class="ad-box ad-box--300x250">
+      <span class="ad-label">Publicidad</span>
+      <div class="ad-placeholder">300×250</div>
+    </div>
+  </aside>
+
+</div><!-- /page-wrapper -->
+
+<!-- ══════════════════════════════════════════
+     AD — FOOTER LEADERBOARD
+══════════════════════════════════════════ -->
+<div class="ad-leaderboard ad-leaderboard--footer">
+  <div class="ad-inner">
+    <span class="ad-label">Publicidad</span>
+    <div class="ad-placeholder">📢 728×90 · Footer</div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span>© 2026 FutbolHoy</span>
+    <span>Datos: football-data.org</span>
+    <span>Solo para entretenimiento</span>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/api.js"></script>
+<script src="js/render.js"></script>
+<script src="js/prode.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
